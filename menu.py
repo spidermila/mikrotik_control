@@ -6,18 +6,18 @@ class Menu:
         self.commands = commands
         self.config = config
 
-    def run(self):
+    def run(self) -> bool:
         command_line = input(': ')
         if len(command_line) > 0:
             command = command_line.lower().split()[0]
             if command in self.commands['quit cmnds']:
-                return 0
+                return False
             elif command in self.commands['help cmnds']:
                 for c in self.commands:
                     print(f'{c}: {self.commands[c]}')
             elif command in self.commands['list cmnds']:
                 if len(self.config.targets) > 0:
-                    if self.config.is_password_correct(self.config.targets[0]['password']):
+                    if self.config.is_password_correct():
                         for device in self.config.targets:
                             print(f'nme: {device["name"]}')
                             print(f'IPa: {device["address"]}')
@@ -32,3 +32,4 @@ class Menu:
             else:
                 print('Unknown command')
                 print('')
+        return True

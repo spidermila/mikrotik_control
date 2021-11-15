@@ -9,7 +9,7 @@ class Create_Dialog:
 
     def run(self):
         if len(self.config.targets) > 0:
-            if not self.config.is_password_correct(self.config.targets[0]['password']):
+            if not self.config.is_password_correct():
                 print("Wrong password. Can't decrypt passwords for the devices.")
                 return
         cls()
@@ -27,10 +27,10 @@ class Create_Dialog:
         device_password = getpass.getpass('>')
         record = {
             'name': name,
-            'address':address,
-            'port':port,
-            'user':user,
-            'password':f'{self.config.password_encrypt(bytes(device_password,"utf-8"))}',
+            'address': address,
+            'port': port,
+            'user': user,
+            'password': self.config.password_encrypt(bytes(device_password,"utf-8")),
         }
-        self.config['targets'].append(record)
-        save_cfg(data)
+        self.config.targets.append(record)
+        self.config.save_cfg()

@@ -17,16 +17,13 @@ def main() -> int:
         'create cmnds': ['c', 'create'],
     }
     main_menu = Menu(config, main_menu_commands)
-
     
     # TODO: zkontrolovat, jestli existuje cfg.yaml
     # TODO: zkontrolovat, jestli ma cfg.yaml minimalni interni strukturu
-    
-    
 
     cls()
-    while True:
-        main_menu.run()
+    while main_menu.run():
+        ...
         
 
 if __name__ == '__main__':

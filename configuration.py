@@ -6,7 +6,10 @@ try:
 except(NameError, ModuleNotFoundError):
     import sys
     print('PyYAML is needed for this game.')
-    raise ImportError(f'PyYAML is needed for this game.\nInstall it: {sys.executable} -m pip install PyYAML')
+    raise ImportError(
+        f'PyYAML is needed for this game.\n'+
+        f'Install it: {sys.executable} -m pip install PyYAML'
+    )
 
 from base64 import urlsafe_b64encode as b64e
 from base64 import urlsafe_b64decode as b64d
@@ -15,15 +18,24 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from pathlib import Path
+from typing import List
 
 class Configuration:
     def __init__(self, password: str, filename: str = 'cfg.yaml') -> None:
         self.password = password
         self.filename = filename
+        self.targets: List[dict] = []
 
-    def save_cfg(self, data) -> None:
+    def save_cfg_to_file(self) -> None:
+        data = {}
+        data['targets'] = self.targets
         with io.open(self.filename, 'w', encoding='utf8') as outfile:
-            yaml.dump(data, outfile, default_flow_style=False, allow_unicode=True)
+            yaml.dump(
+                data,
+                outfile,
+                default_flow_style=False,
+                allow_unicode=True
+            )
 
     def _derive_key(
             self,
@@ -56,22 +68,32 @@ class Configuration:
     def password_decrypt(self, token: bytes) -> str:
         try:
             decoded = b64d(token)
-            salt, iter, token = decoded[:16], decoded[16:20], b64e(decoded[20:])
+            salt, iter, token = (
+                decoded[:16],
+                decoded[16:20],
+                b64e(decoded[20:])
+            )
             iterations = int.from_bytes(iter, 'big')
             key = self. _derive_key(self.password.encode(), salt, iterations)
             return Fernet(key).decrypt(token).decode('utf-8')
         except:
             return 'Invalid password'
 
-    def is_password_correct(self, token: bytes) -> bool:
-        try:
-            decoded = b64d(token)
-            salt, iter, token = decoded[:16], decoded[16:20], b64e(decoded[20:])
-            iterations = int.from_bytes(iter, 'big')
-            key = self._derive_key(self.password.encode(), salt, iterations)
-            Fernet(key).decrypt(token).decode('utf-8')
-        except:
-            return False
+    def is_password_correct(self) -> bool:
+        for target in self.targets:
+            token = target['password']
+            try:
+                decoded = b64d(token)
+                salt, iter, token = (
+                    decoded[:16],
+                    decoded[16:20],
+                    b64e(decoded[20:])
+                )
+                iterations = int.from_bytes(iter, 'big')
+                key = self._derive_key(self.password.encode(), salt, iterations)
+                Fernet(key).decrypt(token).decode('utf-8')
+            except:
+                return False
         return True
 
     def load_config(self) -> None:
@@ -99,7 +121,7 @@ class Configuration:
             if file_has_data:
                 if isinstance(data, dict):
                     if not 'targets' in data.keys():
-                        data['targets'] = []
+                        pass
                     else:
                         if isinstance(data['targets'], list):
                             all_are_dct = True
@@ -108,11 +130,15 @@ class Configuration:
                                     all_are_dct = False
                             if not all_are_dct:
                                 print(
-                                    "cfg file error: some of the targets are/is not a dict"
+                                    "cfg file error: "+
+                                    "some of the targets are/is not a dict"
                                 )
                                 return
                         else:
-                            print("cfg file error: targets are not a list")
+                            print(
+                                "cfg file error: "+
+                                "targets are not a list"
+                            )
                             return
                     # more keys will follow here
                     # more ifs'
