@@ -1,10 +1,18 @@
 from configuration import Configuration
-from create_dialog import Create_Dialog
+from createdialog import CreateDialog
+from device import Device
+from typing import List
 
-class Menu:
-    def __init__(self, config: Configuration, commands: dict) -> None:
-        self.commands = commands
+class MainMenu:
+    def __init__(self, config: Configuration, devices: List[Device]) -> None:
         self.config = config
+        self.devices = devices
+        self.commands = {
+        'quit cmnds': ['q', 'quit', 'exit'],
+        'help cmnds': ['h', 'help'],
+        'list cmnds': ['l', 'list'],
+        'create cmnds': ['c', 'create'],
+    }
 
     def run(self) -> bool:
         command_line = input(': ')
@@ -27,7 +35,7 @@ class Menu:
                     else:
                         print("Wrong password. Can't decrypt passwords for the devices.")
             elif command in self.commands['create cmnds']:
-                create_dialog = Create_Dialog(self.config)
+                create_dialog = CreateDialog(self.config)
                 create_dialog.run()
             else:
                 print('Unknown command')

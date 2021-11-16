@@ -3,7 +3,7 @@ import getpass
 from cls import cls
 from configuration import Configuration
 
-class Create_Dialog:
+class CreateDialog:
     def __init__(self, config: Configuration) -> None:
         self.config = config
 
