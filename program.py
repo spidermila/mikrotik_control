@@ -27,4 +27,12 @@ class Program:
         if len(self.config.targets) == 0:
             return
         for target in self.config.targets:
-            ...
+            self.devices.append(
+                Device(
+                    target['name'],
+                    target['address'],
+                    target['port'],
+                    target['user'],
+                    target['password'],
+                )
+            )

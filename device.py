@@ -6,5 +6,7 @@ class Device:
         self.user = user
         self.encrypted_password = encrypted_password
     
-    def test_connection(self):
-        pass
+    def test_connection(self) -> bool:
+        if self.name == 'neco':
+            return False
+        return True
