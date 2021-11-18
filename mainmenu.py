@@ -8,7 +8,11 @@ from typing import Tuple
 
 
 class MainMenu:
-    def __init__(self, config: Configuration, devices: List[Device]) -> None:
+    def __init__(
+        self,
+        config: Configuration,
+        devices: List[Device]
+    ) -> None:
         self.config = config
         self.devices = devices
         self.commands = {
@@ -40,7 +44,7 @@ class MainMenu:
                     else:
                         print("Wrong password. Can't decrypt passwords for the devices.")
             elif command in self.commands['create cmnds']:
-                create_dialog = CreateDialog(self.config)
+                create_dialog = CreateDialog(self.config, self.devices)
                 create_dialog.run()
             elif command in self.commands['testall cmnds']:
                 print('Testing...')

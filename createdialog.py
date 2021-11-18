@@ -1,11 +1,15 @@
 import getpass
+from typing import List
 
 from cls import cls
 from configuration import Configuration
+from device import Device
+
 
 class CreateDialog:
-    def __init__(self, config: Configuration) -> None:
+    def __init__(self, config: Configuration, devices: List[Device]) -> None:
         self.config = config
+        self.devices = devices
 
     def run(self):
         if len(self.config.targets) > 0:
@@ -25,15 +29,26 @@ class CreateDialog:
             user = 'control'
         print('Ener password')
         device_password = getpass.getpass('>')
+        encrypted_password = self.config.password_encrypt(
+            bytes(device_password,"utf-8"),
+            self.config.password
+        )
         record = {
             'name': name,
             'address': address,
             'port': port,
             'user': user,
-            'password': self.config.password_encrypt(
-                bytes(device_password,"utf-8"),
-                self.config.password
-            ),
+            'password': encrypted_password,
         }
+        self.devices.append(
+            Device(
+                name,
+                address,
+                port,
+                user,
+                encrypted_password,
+                self.config
+            )
+        )
         self.config.targets.append(record)
         self.config.save_cfg_to_file()

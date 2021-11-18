@@ -16,7 +16,10 @@ class Program:
         self._instantiate_devices()
 
     def run(self) -> int:
-        main_menu = MainMenu(self.config, self.devices)
+        main_menu = MainMenu(
+            self.config,
+            self.devices
+        )
 
         cls()
         while main_menu.run():
