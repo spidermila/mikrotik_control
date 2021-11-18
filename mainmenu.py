@@ -2,19 +2,20 @@ from configuration import Configuration
 from cprint import cprint
 from createdialog import CreateDialog
 from device import Device
-from typing import Any
+from group import Group
 from typing import List
-from typing import Tuple
 
 
 class MainMenu:
     def __init__(
         self,
         config: Configuration,
-        devices: List[Device]
+        devices: List[Device],
+        groups: List[Group],
     ) -> None:
         self.config = config
         self.devices = devices
+        self.groups = groups
         self.commands = {
         'quit cmnds': ['q', 'quit', 'exit'],
         'help cmnds': ['h', 'help'],
@@ -41,11 +42,16 @@ class MainMenu:
                         print(f'IPa: {target["address"]}')
                         print(f'prt: {target["port"]}')
                         print(f'usr: {target["user"]}')
+                        print(f'grp: {target["group"]}')
                         print('-'*20)
                 else:
                     print("Wrong password. Can't decrypt passwords for the devices.")
         elif command in self.commands['create cmnds']:
-            create_dialog = CreateDialog(self.config, self.devices)
+            create_dialog = CreateDialog(
+                self.config,
+                self.devices,
+                self.groups
+            )
             create_dialog.run()
         elif command in self.commands['testall cmnds']:
             if self.config.is_password_correct():

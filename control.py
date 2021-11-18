@@ -1,4 +1,3 @@
-from cls import cls
 from program import Program
 
 def main() -> int:    

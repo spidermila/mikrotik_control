@@ -164,29 +164,3 @@ class Configuration:
         else:
             ...
             # create file and basic structure
-
-
-    '''\
-    data = {
-        'targets':
-        [
-            {
-                'name': 'Router 3011',
-                'address':'192.168.111.1',
-                'port':22,
-                'user':'control',
-                'password':f'{password_encrypt(bytes("heslo.pro.Control","utf-8"),password)}',
-            },
-            {
-                'name':'AP Obyvak',
-                'address':'192.168.111.111',
-                'port':22,
-                'user':'control',
-                'password':f'{password_encrypt(bytes("heslo.pro.Control","utf-8"),password)}',
-            },
-        ],
-        'neco':'neco dalsiho',
-    }
-
-    save_cfg(data)
-    '''

@@ -2,6 +2,7 @@ import paramiko
 import subprocess
 
 from configuration import Configuration
+from group import Group
 
 # paramiko.common.logging.basicConfig(level=paramiko.common.DEBUG)
 
@@ -13,7 +14,8 @@ class Device:
             port: int,
             user: str,
             encrypted_password: str,
-            config: Configuration
+            group: Group,
+            config: Configuration,
         ) -> None:
         self.name = name
         self.address = address
@@ -42,7 +44,7 @@ class Device:
                 port=self.port,
                 username=self.user,
                 password=self.config.password_decrypt(
-                    self.encrypted_password
+                    bytes(self.encrypted_password, "utf-8")
                 ),
                 look_for_keys=False
             )
