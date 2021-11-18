@@ -34,5 +34,6 @@ class Program:
                     target['port'],
                     target['user'],
                     target['password'],
+                    self.config
                 )
             )

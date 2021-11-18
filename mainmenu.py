@@ -43,12 +43,15 @@ class MainMenu:
                 create_dialog = CreateDialog(self.config)
                 create_dialog.run()
             elif command in self.commands['testall cmnds']:
+                print('Testing...')
                 output = []
                 for device in self.devices:
                     if device.test_connection():
                         output.append((device.name, ': ok'))
                     else:
                         output.append((device.name, ': KO!'))
+                print('result:')
+                print('-'*15)
                 cprint(output)
             else:
                 print('Unknown command')

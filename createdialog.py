@@ -30,7 +30,10 @@ class CreateDialog:
             'address': address,
             'port': port,
             'user': user,
-            'password': self.config.password_encrypt(bytes(device_password,"utf-8")),
+            'password': self.config.password_encrypt(
+                bytes(device_password,"utf-8"),
+                self.config.password
+            ),
         }
         self.config.targets.append(record)
-        self.config.save_cfg()
+        self.config.save_cfg_to_file()
