@@ -45,8 +45,12 @@ class Configuration:
         ) -> bytes:
         """Derive a secret key from a given password and salt"""
         kdf = PBKDF2HMAC(
-            algorithm=hashes.SHA256(), length=32, salt=salt,
-            iterations=iterations, backend=default_backend())
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=salt,
+            iterations=iterations,
+            backend=default_backend()
+        )
         return b64e(kdf.derive(password))
 
     def password_encrypt(
@@ -74,7 +78,11 @@ class Configuration:
                 b64e(decoded[20:])
             )
             iterations = int.from_bytes(iter, 'big')
-            key = self. _derive_key(self.password.encode(), salt, iterations)
+            key = self. _derive_key(
+                self.password.encode(),
+                salt,
+                iterations
+            )
             return Fernet(key).decrypt(token).decode('utf-8')
         except:
             return 'Invalid password'
@@ -90,7 +98,11 @@ class Configuration:
                     b64e(decoded[20:])
                 )
                 iterations = int.from_bytes(iter, 'big')
-                key = self._derive_key(self.password.encode(), salt, iterations)
+                key = self._derive_key(
+                    self.password.encode(),
+                    salt,
+                    iterations
+                )
                 Fernet(key).decrypt(token).decode('utf-8')
             except:
                 return False

@@ -28,9 +28,11 @@ class Device:
             result = True
             if self._ssh_test():
                 result = True
+            else:
+                result = False
         return result
 
-    def _ssh_test(self):
+    def _ssh_test(self) -> bool:
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
@@ -44,15 +46,17 @@ class Device:
                 ),
                 look_for_keys=False
             )
-        except:
+        except paramiko.AuthenticationException as err:
+            print(f'ssh err on {self.name}: {err}')
             return False
         else:
-            remote_cmd = 'interface print terse'
-            stdin, stdout, stderr = ssh.exec_command(remote_cmd)
+            # remote_cmd = 'interface print terse'
+            # stdin, stdout, stderr = ssh.exec_command(remote_cmd)
             # for line in stdout.readlines():
             #     print(line.strip('\n'))
             # print("Options available to deal with the connectios are many like\n{}".format(dir(ssh)))
             ssh.close()
+            return True
 
     def _ping_test(self) -> bool:
         result = subprocess.run(
