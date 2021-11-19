@@ -73,8 +73,15 @@ class CreateDialog:
                 )
                 return
         cls()
+        print('Already existing defices:')
+        for device in self.devices:
+            print(f'{device.name}')
+        print('-'*15)
         print('Name of the new device')
+        print('Leave blank to go back.')
         name = input('>')
+        if len(name) == 0:
+            return
         print('Ener IP address')
         address = input('>')
         while True:

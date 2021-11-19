@@ -1,8 +1,6 @@
 from typing import List
 
 from libs.configuration import Configuration
-from libs.cprint import cprint
-from libs.createdialog import CreateDialog
 from libs.device import Device
 from libs.group import Group
 from libs.script import Script
@@ -52,34 +50,11 @@ class ScriptMenu:
             else:
                 print('No scripts defined.')
         elif command in self.commands['create cmnds']:
-            create_dialog = CreateDialog(
-                self.config,
-                self.devices,
-                self.groups,
-            )
-            create_dialog.run()
-        elif command in self.commands['testall cmnds']:
-            print('Testing...')
-            output = []
-            for device in self.devices:
-                if device.test_connection():
-                    output.append((device.name, ': ok'))
-                else:
-                    output.append((device.name, ': KO!'))
-            print('result:')
-            print('-'*15)
-            cprint(output)
-        elif command[0] in self.commands['device cmnds']:
-            if self.config.is_password_correct():
-                if len(command) > 1:
-                    if command[1:3] == 'li':
-                        if len(command) > 3:
-                            if command[3] == 'r':
-                                # refresh before listing
-                                ...
-                        self.devices[1].print_cached_interfaces()
-                pass
-                # dialog for selecting a device
+            ...
+        elif command in self.commands['run cmnds']:
+            ...
+        elif command in self.commands['edit cmnds']:
+            ...
         else:
             print('Unknown command')
             print('')
