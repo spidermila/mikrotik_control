@@ -5,9 +5,9 @@ try:
     import yaml
 except(NameError, ModuleNotFoundError):
     import sys
-    print('PyYAML is needed for this game.')
+    print('PyYAML is needed for this program.')
     raise ImportError(
-        f'PyYAML is needed for this game.\n'+
+        f'PyYAML is needed for this program.\n'+
         f'Install it: {sys.executable} -m pip install PyYAML'
     )
 
@@ -88,6 +88,8 @@ class Configuration:
             return 'Invalid password'
 
     def is_password_correct(self) -> bool:
+        if len(self.targets) == 0:
+            return True
         for target in self.targets:
             token = target['password']
             try:

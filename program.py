@@ -5,6 +5,8 @@ from configuration import Configuration
 from device import Device
 from group import Group
 from mainmenu import MainMenu
+from script import Script
+from scripthandler import ScriptHandler
 from typing import List
 from typing import Optional
 
@@ -13,18 +15,22 @@ class Program:
         self.config = Configuration(getpass.getpass())
         self.config.check_or_create_config_file()
         self.config.load_config()
+        self.script_handler = ScriptHandler()
+        self.script_handler.load_scripts()
+        self.script_handler.instantiate_scripts()
         self.devices: List[Device] = []
         self.groups: List[Group] = []
+        self.scripts = self.script_handler.scripts
 
         self._instantiate_groups()
         self._instantiate_devices()
-        
 
     def run(self) -> int:
         main_menu = MainMenu(
             self.config,
             self.devices,
             self.groups,
+            self.scripts
         )
 
         cls()
