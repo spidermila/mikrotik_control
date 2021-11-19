@@ -1,4 +1,4 @@
-from program import Program
+from libs.program import Program
 
 def main() -> int:
     program = Program()

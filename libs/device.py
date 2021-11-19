@@ -3,10 +3,10 @@ from typing import List
 
 import paramiko
 
-from configuration import Configuration
-from cprint import cprint
-from group import Group
-from interface import Interface
+from libs.configuration import Configuration
+from libs.cprint import cprint
+from libs.group import Group
+from libs.interface import Interface
 
 # paramiko.common.logging.basicConfig(level=paramiko.common.DEBUG)
 

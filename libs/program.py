@@ -2,13 +2,13 @@ import getpass
 from typing import List
 from typing import Optional
 
-from cls import cls
-from configuration import Configuration
-from device import Device
-from group import Group
-from mainmenu import MainMenu
-from script import Script
-from scripthandler import ScriptHandler
+from libs.cls import cls
+from libs.configuration import Configuration
+from libs.device import Device
+from libs.group import Group
+from libs.mainmenu import MainMenu
+from libs.script import Script
+from libs.scripthandler import ScriptHandler
 
 class Program:
     def __init__(self) -> None:

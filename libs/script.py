@@ -1,8 +1,8 @@
 from typing import List
 from typing import Optional
 
-from device import Device
-from group import Group
+from libs.device import Device
+from libs.group import Group
 
 class Script:
     def __init__(

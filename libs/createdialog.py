@@ -1,10 +1,10 @@
 import getpass
 from typing import List
 
-from cls import cls
-from configuration import Configuration
-from device import Device
-from group import Group
+from libs.cls import cls
+from libs.configuration import Configuration
+from libs.device import Device
+from libs.group import Group
 
 
 class CreateDialog:

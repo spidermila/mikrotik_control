@@ -2,7 +2,7 @@ import io
 from pathlib import Path
 from typing import List
 
-from script import Script
+from libs.script import Script
 
 try:
     import yaml

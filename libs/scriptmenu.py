@@ -1,11 +1,11 @@
 from typing import List
 
-from configuration import Configuration
-from cprint import cprint
-from createdialog import CreateDialog
-from device import Device
-from group import Group
-from script import Script
+from libs.configuration import Configuration
+from libs.cprint import cprint
+from libs.createdialog import CreateDialog
+from libs.device import Device
+from libs.group import Group
+from libs.script import Script
 
 
 class ScriptMenu:
