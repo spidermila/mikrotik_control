@@ -121,7 +121,7 @@ class Configuration:
                     print(exc)
         else:
             print(f"File {self.filename} doesn't exist.")
-            raise
+            return
         self.targets = data['targets']
 
     def check_or_create_config_file(self) -> None:

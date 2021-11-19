@@ -52,7 +52,7 @@ class CreateDialog:
                             ),
                         )
                         chosen_group = self.groups[-1]
-                        print(f'New group{new_group_name} created.')
+                        print(f'New group {new_group_name} created.')
                         group_chosen = True
                         break
                     elif answer.lower() == 'n':
@@ -73,10 +73,11 @@ class CreateDialog:
                 )
                 return
         cls()
-        print('Already existing defices:')
-        for device in self.devices:
-            print(f'{device.name}')
-        print('-'*15)
+        if len(self.devices) > 0:
+            print('Already existing defices:')
+            for device in self.devices:
+                print(f'{device.name}')
+            print('-'*15)
         print('Name of the new device')
         print('Leave blank to go back.')
         name = input('>')

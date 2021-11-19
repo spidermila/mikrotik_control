@@ -45,7 +45,11 @@ class MainMenu:
         if not self.password_verified:
             if not self.config.is_password_correct():
                 print(
-                    "Wrong password. Can't decrypt passwords for the devices.",
+                    'Wrong password. '
+                    "Can't decrypt passwords for the devices.\n"
+                    "If you've lost your password, "
+                    'create a new configuration file '
+                    'and start over.',
                 )
                 return False
             else:
