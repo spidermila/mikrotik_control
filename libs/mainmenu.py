@@ -4,6 +4,7 @@ from libs.configuration import Configuration
 from libs.cprint import cprint
 from libs.createdialog import CreateDialog
 from libs.device import Device
+from libs.devicemenu import DeviceMenu
 from libs.group import Group
 from libs.script import Script
 from libs.scriptmenu import ScriptMenu
@@ -23,6 +24,13 @@ class MainMenu:
         self.groups = groups
         self.scripts = scripts
         self.password_verified = False
+
+        self.device_menu = DeviceMenu(
+            self.config,
+            self.devices,
+            self.groups,
+            self.scripts,
+        )
 
         self.script_menu = ScriptMenu(
             self.config,
@@ -100,8 +108,8 @@ class MainMenu:
                             # refresh before listing
                             ...
                     self.devices[1].print_cached_interfaces()
-            pass
-            # dialog for selecting a device
+            while self.device_menu.run():
+                ...
         elif command[0] in self.commands['script cmnds']:
             while self.script_menu.run():
                 ...

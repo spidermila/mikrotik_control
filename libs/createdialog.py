@@ -28,7 +28,7 @@ class CreateDialog:
                 for group in self.groups:
                     print(f'{group.name}')
             print('Enter group')
-            new_group_name = input('>')
+            new_group_name = input('> ')
             found = False
             for group in self.groups:
                 if new_group_name == group.name:
