@@ -68,7 +68,9 @@ class CreateDialog:
     def run(self):
         if len(self.config.targets) > 0:
             if not self.config.is_password_correct():
-                print("Wrong password. Can't decrypt passwords for the devices.")
+                print(
+                    "Wrong password. Can't decrypt passwords for the devices.",
+                )
                 return
         cls()
         print('Name of the new device')
@@ -79,7 +81,7 @@ class CreateDialog:
             try:
                 print('Ener port')
                 port = int(input('>'))
-            except:
+            except ValueError:
                 print('Port must be an integer!')
             else:
                 if port > 65_535:
@@ -93,7 +95,7 @@ class CreateDialog:
         print('Ener password')
         device_password = getpass.getpass('>')
         encrypted_password = self.config.password_encrypt(
-            bytes(device_password,'utf-8'),
+            bytes(device_password, 'utf-8'),
             self.config.password,
         )
         chosen_group = self._pick_group_dialog()

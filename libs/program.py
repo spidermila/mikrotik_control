@@ -10,6 +10,7 @@ from libs.mainmenu import MainMenu
 from libs.script import Script
 from libs.scripthandler import ScriptHandler
 
+
 class Program:
     def __init__(self) -> None:
         self.config = Configuration(getpass.getpass())
@@ -20,7 +21,7 @@ class Program:
         self.script_handler.instantiate_scripts()
         self.devices: List[Device] = []
         self.groups: List[Group] = []
-        self.scripts = self.script_handler.scripts
+        self.scripts: List[Script] = self.script_handler.scripts
 
         self._instantiate_groups()
         self._instantiate_devices()

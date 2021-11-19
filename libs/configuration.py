@@ -7,18 +7,20 @@ except(NameError, ModuleNotFoundError):
     import sys
     print('PyYAML is needed for this program.')
     raise ImportError(
-        f'PyYAML is needed for this program.\n'+
+        'PyYAML is needed for this program.\n'
         f'Install it: {sys.executable} -m pip install PyYAML',
     )
 
 from base64 import urlsafe_b64encode as b64e
 from base64 import urlsafe_b64decode as b64d
 from cryptography.fernet import Fernet
+from cryptography.fernet import InvalidToken
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from pathlib import Path
 from typing import List
+
 
 class Configuration:
     def __init__(self, password: str, filename: str = 'cfg.yaml') -> None:
@@ -84,7 +86,7 @@ class Configuration:
                 iterations,
             )
             return Fernet(key).decrypt(token).decode('utf-8')
-        except:
+        except InvalidToken:
             return 'Invalid password'
 
     def is_password_correct(self) -> bool:
@@ -106,7 +108,7 @@ class Configuration:
                     iterations,
                 )
                 Fernet(key).decrypt(token).decode('utf-8')
-            except:
+            except InvalidToken:
                 return False
         return True
 
@@ -131,10 +133,10 @@ class Configuration:
                     file_has_data = True
                 except yaml.YAMLError as exc:
                     file_has_data = False
-                    # print(exc)
+                    print(exc)
             if file_has_data:
                 if isinstance(data, dict):
-                    if not 'targets' in data.keys():
+                    if 'targets' not in data.keys():
                         pass
                     else:
                         if isinstance(data['targets'], list):
@@ -144,21 +146,21 @@ class Configuration:
                                     all_are_dct = False
                             if not all_are_dct:
                                 print(
-                                    'cfg file error: '+
+                                    'cfg file error: '
                                     'some of the targets are/is not a dict',
                                 )
                                 return
                         else:
-                            print(
-                                'cfg file error: '+
+                            print((
+                                'cfg file error: '
                                 'targets are not a list',
-                            )
+                            ))
                             return
                     # more keys will follow here
                     # more ifs'
                 else:
                     print(
-                        f'Wrong format of {self.filename}. '+
+                        f'Wrong format of {self.filename}. '
                         'Expected dict as the main object.',
                     )
                     raise

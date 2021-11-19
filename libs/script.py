@@ -4,6 +4,7 @@ from typing import Optional
 from libs.device import Device
 from libs.group import Group
 
+
 class Script:
     def __init__(
         self,

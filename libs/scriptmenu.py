@@ -22,12 +22,12 @@ class ScriptMenu:
         self.scripts = scripts
 
         self.commands = {
-        'quit cmnds': ['q', 'quit', 'exit'],
-        'help cmnds': ['h', 'help'],
-        'list cmnds': ['l'],
-        'create cmnds': ['c'],
-        'run cmnds': ['r'],
-        'edit cmnds': ['e'],
+            'quit cmnds': ['q', 'quit', 'exit'],
+            'help cmnds': ['h', 'help'],
+            'list cmnds': ['l'],
+            'create cmnds': ['c'],
+            'run cmnds': ['r'],
+            'edit cmnds': ['e'],
         }
 
     def run(self) -> bool:
@@ -42,16 +42,13 @@ class ScriptMenu:
                 print(f'{c}: {self.commands[c]}')
         elif command in self.commands['list cmnds']:
             if len(self.scripts) > 0:
-                if self.config.is_password_correct():
-                    for script in self.scripts:
-                        print(f'name   : {script.name}')
-                        print(f'devices: {script.devices}')
-                        print(f'groups : {script.groups}')
-                        print(f'scripts: {script.scripts}')
-                        print(f'actions: {script.actions}')
-                        print('-'*20)
-                else:
-                    print("Wrong password. Can't decrypt passwords for the devices.")
+                for script in self.scripts:
+                    print(f'name   : {script.name}')
+                    print(f'devices: {script.devices}')
+                    print(f'groups : {script.groups}')
+                    print(f'scripts: {script.scripts}')
+                    print(f'actions: {script.actions}')
+                    print('-'*20)
             else:
                 print('No scripts defined.')
         elif command in self.commands['create cmnds']:
@@ -62,19 +59,16 @@ class ScriptMenu:
             )
             create_dialog.run()
         elif command in self.commands['testall cmnds']:
-            if self.config.is_password_correct():
-                print('Testing...')
-                output = []
-                for device in self.devices:
-                    if device.test_connection():
-                        output.append((device.name, ': ok'))
-                    else:
-                        output.append((device.name, ': KO!'))
-                print('result:')
-                print('-'*15)
-                cprint(output)
-            else:
-                print("Wrong password. Can't decrypt passwords for the devices.")
+            print('Testing...')
+            output = []
+            for device in self.devices:
+                if device.test_connection():
+                    output.append((device.name, ': ok'))
+                else:
+                    output.append((device.name, ': KO!'))
+            print('result:')
+            print('-'*15)
+            cprint(output)
         elif command[0] in self.commands['device cmnds']:
             if self.config.is_password_correct():
                 if len(command) > 1:

@@ -1,4 +1,4 @@
-import io
+# import io
 from pathlib import Path
 from typing import List
 
@@ -9,10 +9,10 @@ try:
 except(NameError, ModuleNotFoundError):
     import sys
     print('PyYAML is needed for this program.')
-    raise ImportError(
-        f'PyYAML is needed for this program.\n'+
+    raise ImportError((
+        'PyYAML is needed for this program.\n'
         f'Install it: {sys.executable} -m pip install PyYAML',
-    )
+    ))
 
 
 class ScriptHandler:

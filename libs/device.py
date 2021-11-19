@@ -10,6 +10,7 @@ from libs.interface import Interface
 
 # paramiko.common.logging.basicConfig(level=paramiko.common.DEBUG)
 
+
 class Device:
     def __init__(
             self,
@@ -63,7 +64,10 @@ class Device:
             # stdin, stdout, stderr = ssh.exec_command(remote_cmd)
             # for line in stdout.readlines():
             #     print(line.strip('\n'))
-            # print("Options available to deal with the connectios are many like\n{}".format(dir(ssh)))
+            # print((
+            #   "Options available to deal with the "
+            #   f"connectios are many like\n{dir(ssh)}"
+            # ))
             ssh.close()
             return True
 
@@ -157,7 +161,6 @@ class Device:
                     ),
                 )
 
-            # print("Options available to deal with the connectios are many like\n{}".format(dir(ssh)))
             ssh.close()
 
     def print_cached_interfaces(self) -> None:

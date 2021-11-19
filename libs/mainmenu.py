@@ -32,19 +32,21 @@ class MainMenu:
         )
 
         self.commands = {
-        'quit cmnds': ['q', 'quit', 'exit'],
-        'help cmnds': ['h', 'help'],
-        'list cmnds': ['l', 'list'],
-        'create cmnds': ['c'],
-        'testall cmnds': ['ta'],
-        'device cmnds': ['d'],
-        'script cmnds': ['s'],
+            'quit cmnds': ['q', 'quit', 'exit'],
+            'help cmnds': ['h', 'help'],
+            'list cmnds': ['l', 'list'],
+            'create cmnds': ['c'],
+            'testall cmnds': ['ta'],
+            'device cmnds': ['d'],
+            'script cmnds': ['s'],
         }
 
     def run(self) -> bool:
         if not self.password_verified:
             if not self.config.is_password_correct():
-                print("Wrong password. Can't decrypt passwords for the devices.")
+                print(
+                    "Wrong password. Can't decrypt passwords for the devices.",
+                )
                 return False
             else:
                 self.password_verified = True
