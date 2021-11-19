@@ -1,9 +1,10 @@
+from typing import List
+
 from configuration import Configuration
 from cprint import cprint
 from createdialog import CreateDialog
 from device import Device
 from group import Group
-from typing import List
 from script import Script
 
 
@@ -13,13 +14,13 @@ class ScriptMenu:
         config: Configuration,
         devices: List[Device],
         groups: List[Group],
-        scripts: List[Script]
+        scripts: List[Script],
     ) -> None:
         self.config = config
         self.devices = devices
         self.groups = groups
         self.scripts = scripts
-        
+
         self.commands = {
         'quit cmnds': ['q', 'quit', 'exit'],
         'help cmnds': ['h', 'help'],
@@ -27,7 +28,7 @@ class ScriptMenu:
         'create cmnds': ['c'],
         'run cmnds': ['r'],
         'edit cmnds': ['e'],
-    }
+        }
 
     def run(self) -> bool:
         command_line = input('scr: ')
@@ -57,7 +58,7 @@ class ScriptMenu:
             create_dialog = CreateDialog(
                 self.config,
                 self.devices,
-                self.groups
+                self.groups,
             )
             create_dialog.run()
         elif command in self.commands['testall cmnds']:

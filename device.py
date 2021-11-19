@@ -1,11 +1,12 @@
-import paramiko
 import subprocess
+from typing import List
+
+import paramiko
 
 from configuration import Configuration
 from cprint import cprint
 from group import Group
 from interface import Interface
-from typing import List
 
 # paramiko.common.logging.basicConfig(level=paramiko.common.DEBUG)
 
@@ -19,7 +20,7 @@ class Device:
             encrypted_password: str,
             group: Group,
             config: Configuration,
-        ) -> None:
+    ) -> None:
         self.name = name
         self.address = address
         self.port = port
@@ -29,7 +30,7 @@ class Device:
         self.config = config
 
         self.interfaces: List[Interface] = []
-    
+
     def test_connection(self) -> bool:
         result = False
         if self._ping_test():
@@ -50,9 +51,9 @@ class Device:
                 port=self.port,
                 username=self.user,
                 password=self.config.password_decrypt(
-                    bytes(self.encrypted_password, "utf-8")
+                    bytes(self.encrypted_password, 'utf-8'),
                 ),
-                look_for_keys=False
+                look_for_keys=False,
             )
         except paramiko.AuthenticationException as err:
             print(f'ssh err on {self.name}: {err}')
@@ -77,7 +78,7 @@ class Device:
             stdin=None,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            check=False
+            check=False,
         )
         if result.returncode != 0:
             print('-'*20)
@@ -101,9 +102,9 @@ class Device:
                 port=self.port,
                 username=self.user,
                 password=self.config.password_decrypt(
-                    bytes(self.encrypted_password, "utf-8")
+                    bytes(self.encrypted_password, 'utf-8'),
                 ),
-                look_for_keys=False
+                look_for_keys=False,
             )
         except paramiko.AuthenticationException as err:
             print(f'ssh err on {self.name}: {err}')
@@ -152,10 +153,10 @@ class Device:
                         running,
                         slave,
                         dynamic,
-                        comment
-                    )
+                        comment,
+                    ),
                 )
-                
+
             # print("Options available to deal with the connectios are many like\n{}".format(dir(ssh)))
             ssh.close()
 
@@ -167,15 +168,15 @@ class Device:
             return
         rows = []
         for interface in self.interfaces:
-            status = ""
+            status = ''
             if interface.dynamic:
-                status += "D"
+                status += 'D'
             if interface.running:
-                status += "R"
+                status += 'R'
             if interface.slave:
-                status += "S"
+                status += 'S'
             if interface.disabled:
-                status += "X"
+                status += 'X'
             row = [
                 f'{interface.number}',
                 f':{interface.name}',

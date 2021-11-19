@@ -8,7 +8,7 @@ except(NameError, ModuleNotFoundError):
     print('PyYAML is needed for this program.')
     raise ImportError(
         f'PyYAML is needed for this program.\n'+
-        f'Install it: {sys.executable} -m pip install PyYAML'
+        f'Install it: {sys.executable} -m pip install PyYAML',
     )
 
 from base64 import urlsafe_b64encode as b64e
@@ -34,22 +34,22 @@ class Configuration:
                 data,
                 outfile,
                 default_flow_style=False,
-                allow_unicode=True
+                allow_unicode=True,
             )
 
     def _derive_key(
             self,
             password: bytes,
             salt: bytes,
-            iterations: int = 100_000
-        ) -> bytes:
+            iterations: int = 100_000,
+    ) -> bytes:
         """Derive a secret key from a given password and salt"""
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
             salt=salt,
             iterations=iterations,
-            backend=default_backend()
+            backend=default_backend(),
         )
         return b64e(kdf.derive(password))
 
@@ -57,8 +57,8 @@ class Configuration:
             self,
             message: bytes,
             password: str,
-            iterations: int = 100_000
-        ) -> str:
+            iterations: int = 100_000,
+    ) -> str:
         salt = secrets.token_bytes(16)
         key = self._derive_key(password.encode(), salt, iterations)
         return b64e(
@@ -66,7 +66,7 @@ class Configuration:
                 salt,
                 iterations.to_bytes(4, 'big'),
                 b64d(Fernet(key).encrypt(message)),
-            )
+            ),
         ).decode('utf-8')
 
     def password_decrypt(self, token: bytes) -> str:
@@ -75,13 +75,13 @@ class Configuration:
             salt, iter, token = (
                 decoded[:16],
                 decoded[16:20],
-                b64e(decoded[20:])
+                b64e(decoded[20:]),
             )
             iterations = int.from_bytes(iter, 'big')
             key = self. _derive_key(
                 self.password.encode(),
                 salt,
-                iterations
+                iterations,
             )
             return Fernet(key).decrypt(token).decode('utf-8')
         except:
@@ -97,13 +97,13 @@ class Configuration:
                 salt, iter, token = (
                     decoded[:16],
                     decoded[16:20],
-                    b64e(decoded[20:])
+                    b64e(decoded[20:]),
                 )
                 iterations = int.from_bytes(iter, 'big')
                 key = self._derive_key(
                     self.password.encode(),
                     salt,
-                    iterations
+                    iterations,
                 )
                 Fernet(key).decrypt(token).decode('utf-8')
             except:
@@ -144,21 +144,23 @@ class Configuration:
                                     all_are_dct = False
                             if not all_are_dct:
                                 print(
-                                    "cfg file error: "+
-                                    "some of the targets are/is not a dict"
+                                    'cfg file error: '+
+                                    'some of the targets are/is not a dict',
                                 )
                                 return
                         else:
                             print(
-                                "cfg file error: "+
-                                "targets are not a list"
+                                'cfg file error: '+
+                                'targets are not a list',
                             )
                             return
                     # more keys will follow here
                     # more ifs'
                 else:
-                    print(f"Wrong format of {self.filename}. "+
-                        "Expected dict as the main object.")
+                    print(
+                        f'Wrong format of {self.filename}. '+
+                        'Expected dict as the main object.',
+                    )
                     raise
             else:
                 ...

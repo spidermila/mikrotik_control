@@ -48,7 +48,7 @@ class CreateDialog:
                         self.groups.append(
                             Group(
                                 new_group_name,
-                                self.config
+                                self.config,
                             ),
                         )
                         chosen_group = self.groups[-1]
@@ -93,8 +93,8 @@ class CreateDialog:
         print('Ener password')
         device_password = getpass.getpass('>')
         encrypted_password = self.config.password_encrypt(
-            bytes(device_password,"utf-8"),
-            self.config.password
+            bytes(device_password,'utf-8'),
+            self.config.password,
         )
         chosen_group = self._pick_group_dialog()
 
@@ -114,8 +114,8 @@ class CreateDialog:
                 user,
                 encrypted_password,
                 chosen_group,
-                self.config
-            )
+                self.config,
+            ),
         )
         self.config.targets.append(record)
         self.config.save_cfg_to_file()

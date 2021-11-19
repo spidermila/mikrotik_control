@@ -1,6 +1,6 @@
 from program import Program
 
-def main() -> int:    
+def main() -> int:
     program = Program()
     program.run()
     return 0

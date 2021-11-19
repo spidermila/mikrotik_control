@@ -17,9 +17,9 @@ def cprint(rows) -> None: # type: ignore
     output: List[str] = []
     for row in rows:
         new_row = ''
-        for number, column in enumerate(row):    
+        for number, column in enumerate(row):
             new_row += f'{column:<{column_widths[number]}}'
         output.append(new_row)
-    
+
     for item in output:
         print(item)

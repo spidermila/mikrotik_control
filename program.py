@@ -1,4 +1,6 @@
 import getpass
+from typing import List
+from typing import Optional
 
 from cls import cls
 from configuration import Configuration
@@ -7,8 +9,6 @@ from group import Group
 from mainmenu import MainMenu
 from script import Script
 from scripthandler import ScriptHandler
-from typing import List
-from typing import Optional
 
 class Program:
     def __init__(self) -> None:
@@ -30,14 +30,14 @@ class Program:
             self.config,
             self.devices,
             self.groups,
-            self.scripts
+            self.scripts,
         )
 
         cls()
         while main_menu.run():
             ...
         return 0
-    
+
     def _instantiate_devices(self):
         if len(self.config.targets) == 0:
             return
@@ -50,8 +50,8 @@ class Program:
                     target['user'],
                     target['password'],
                     target['group'],
-                    self.config
-                )
+                    self.config,
+                ),
             )
 
     def _instantiate_groups(self):
@@ -59,13 +59,13 @@ class Program:
             return
         for target in self.config.targets:
             if not self.group_by_name_exists(
-                target['group']
+                target['group'],
             ):
                 self.groups.append(
                     Group(
                         target['group'],
-                        self.config
-                    )
+                        self.config,
+                    ),
                 )
 
     def get_group_by_name(self, lookup_name: str) -> Optional[Group]:
@@ -74,7 +74,7 @@ class Program:
             if group.name == lookup_name:
                 return group
         return None
-    
+
     def group_by_name_exists(self, lookup_name: str) -> bool:
         for group in self.groups:
             if group.name == lookup_name:

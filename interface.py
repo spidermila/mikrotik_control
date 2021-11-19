@@ -7,7 +7,7 @@ class Interface:
         running: bool,
         slave: bool,
         dynamic: bool,
-        comment: str
+        comment: str,
     ) -> None:
         self.number = number
         self.name = name

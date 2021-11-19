@@ -1,3 +1,5 @@
+from typing import List
+
 from configuration import Configuration
 from cprint import cprint
 from createdialog import CreateDialog
@@ -5,7 +7,6 @@ from device import Device
 from group import Group
 from script import Script
 from scriptmenu import ScriptMenu
-from typing import List
 
 
 class MainMenu:
@@ -14,7 +15,7 @@ class MainMenu:
         config: Configuration,
         devices: List[Device],
         groups: List[Group],
-        scripts: List[Script]
+        scripts: List[Script],
     ) -> None:
 
         self.config = config
@@ -27,9 +28,9 @@ class MainMenu:
             self.config,
             self.devices,
             self.groups,
-            self.scripts
+            self.scripts,
         )
-        
+
         self.commands = {
         'quit cmnds': ['q', 'quit', 'exit'],
         'help cmnds': ['h', 'help'],
@@ -38,7 +39,7 @@ class MainMenu:
         'testall cmnds': ['ta'],
         'device cmnds': ['d'],
         'script cmnds': ['s'],
-    }
+        }
 
     def run(self) -> bool:
         if not self.password_verified:
@@ -66,12 +67,12 @@ class MainMenu:
                     print(f'usr: {target["user"]}')
                     print(f'grp: {target["group"]}')
                     print('-'*20)
-                    
+
         elif command in self.commands['create cmnds']:
             create_dialog = CreateDialog(
                 self.config,
                 self.devices,
-                self.groups
+                self.groups,
             )
             create_dialog.run()
         elif command in self.commands['testall cmnds']:

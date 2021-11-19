@@ -1,8 +1,8 @@
 import io
-
 from pathlib import Path
-from script import Script
 from typing import List
+
+from script import Script
 
 try:
     import yaml
@@ -11,7 +11,7 @@ except(NameError, ModuleNotFoundError):
     print('PyYAML is needed for this program.')
     raise ImportError(
         f'PyYAML is needed for this program.\n'+
-        f'Install it: {sys.executable} -m pip install PyYAML'
+        f'Install it: {sys.executable} -m pip install PyYAML',
     )
 
 
@@ -32,7 +32,7 @@ class ScriptHandler:
             print(f"File {self.filename} doesn't exist.")
             raise
         self.scripts_from_file = data['scripts']
-    
+
     def instantiate_scripts(self) -> None:
         for entry in self.scripts_from_file:
             self.scripts.append(
@@ -41,6 +41,6 @@ class ScriptHandler:
                     entry['devices'],
                     entry['groups'],
                     entry['scripts'],
-                    entry['actions']
-                )
+                    entry['actions'],
+                ),
             )

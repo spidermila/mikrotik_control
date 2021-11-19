@@ -1,6 +1,7 @@
-from device import Device
 from typing import List
 from typing import Optional
+
+from device import Device
 from group import Group
 
 class Script:
@@ -10,11 +11,10 @@ class Script:
         devices: Optional[List[Device]],
         groups: Optional[List[Group]],
         scripts: Optional[List],
-        actions: List[str]
+        actions: List[str],
     ) -> None:
         self.name = name
         self.devices = devices
         self.groups = groups
         self.scripts = scripts
         self.actions = actions
-        
