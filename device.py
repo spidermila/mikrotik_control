@@ -2,7 +2,10 @@ import paramiko
 import subprocess
 
 from configuration import Configuration
+from cprint import cprint
 from group import Group
+from interface import Interface
+from typing import List
 
 # paramiko.common.logging.basicConfig(level=paramiko.common.DEBUG)
 
@@ -22,7 +25,10 @@ class Device:
         self.port = port
         self.user = user
         self.encrypted_password = encrypted_password
+        self.group = group
         self.config = config
+
+        self.interfaces: List[Interface] = []
     
     def test_connection(self) -> bool:
         result = False
@@ -83,3 +89,98 @@ class Device:
             print('-'*20)
             return False
         return True
+
+    def get_interfaces_from_device(self) -> None:
+        print(f'Updating interfaces from {self.name}...')
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        try:
+            ssh.connect(
+                hostname=self.address,
+                port=self.port,
+                username=self.user,
+                password=self.config.password_decrypt(
+                    bytes(self.encrypted_password, "utf-8")
+                ),
+                look_for_keys=False
+            )
+        except paramiko.AuthenticationException as err:
+            print(f'ssh err on {self.name}: {err}')
+            return
+        else:
+            remote_cmd = 'interface print terse'
+            stdin, stdout, stderr = ssh.exec_command(remote_cmd)
+            for line in stdout.readlines():
+                if 'name' not in line:
+                    break
+                new_line = line.strip('\n')
+                print(new_line.split())
+                number = int(new_line.split()[0])
+                name = new_line.split('name=')[1].split()[0]
+                comment = ''
+                if 'comment=' in new_line:
+                    raw_comment = new_line.split('comment=')[1].split()[:-1]
+                    output = []
+                    for item in raw_comment:
+                        if '=' in item:
+                            break
+                        output.append(item)
+                    comment = ' '.join(output)
+                status = new_line.split()[1]
+                if 'X' in status:
+                    disabled = True
+                else:
+                    disabled = False
+                if 'R' in status:
+                    running = True
+                else:
+                    running = False
+                if 'S' in status:
+                    slave = True
+                else:
+                    slave = False
+                if 'D' in status:
+                    dynamic = True
+                else:
+                    dynamic = False
+                self.interfaces.append(
+                    Interface(
+                        number,
+                        name,
+                        disabled,
+                        running,
+                        slave,
+                        dynamic,
+                        comment
+                    )
+                )
+                
+            # print("Options available to deal with the connectios are many like\n{}".format(dir(ssh)))
+            ssh.close()
+
+    def print_cached_interfaces(self) -> None:
+        if len(self.interfaces) == 0:
+            self.get_interfaces_from_device()
+        if len(self.interfaces) == 0:
+            print('No interfaces found')
+            return
+        rows = []
+        for interface in self.interfaces:
+            status = ""
+            if interface.dynamic:
+                status += "D"
+            if interface.running:
+                status += "R"
+            if interface.slave:
+                status += "S"
+            if interface.disabled:
+                status += "X"
+            row = [
+                f'{interface.number}',
+                f':{interface.name}',
+                f':{status}',
+                f':{interface.comment}',
+            ]
+            rows.append(row)
+        cprint(rows)

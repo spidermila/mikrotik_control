@@ -16,12 +16,14 @@ class MainMenu:
         self.config = config
         self.devices = devices
         self.groups = groups
+        
         self.commands = {
         'quit cmnds': ['q', 'quit', 'exit'],
         'help cmnds': ['h', 'help'],
         'list cmnds': ['l', 'list'],
-        'create cmnds': ['c', 'create'],
+        'create cmnds': ['c'],
         'testall cmnds': ['ta'],
+        'device cmnds': ['d'],
     }
 
     def run(self) -> bool:
@@ -67,6 +69,17 @@ class MainMenu:
                 cprint(output)
             else:
                 print("Wrong password. Can't decrypt passwords for the devices.")
+        elif command[0] in self.commands['device cmnds']:
+            if self.config.is_password_correct():
+                if len(command) > 1:
+                    if command[1:3] == 'li':
+                        if len(command) > 3:
+                            if command[3] == 'r':
+                                # refresh before listing
+                                ...
+                        self.devices[1].print_cached_interfaces()
+                pass
+                # dialog for selecting a device
         else:
             print('Unknown command')
             print('')
