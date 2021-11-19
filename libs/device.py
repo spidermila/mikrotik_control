@@ -1,5 +1,7 @@
 import subprocess
+from time import monotonic
 from typing import List
+from typing import Optional
 
 import paramiko
 
@@ -31,6 +33,21 @@ class Device:
         self.config = config
 
         self.interfaces: List[Interface] = []
+        self.time_of_last_update: Optional[int] = None
+
+    def enought_time_passed(self, timeout: int = 20) -> bool:
+        current_time = int(monotonic())
+        if not self.time_of_last_update:
+            self.time_of_last_update = current_time
+            return True
+        if current_time - self.time_of_last_update > timeout:
+            self._set_time_since_last_update_now()
+            return True
+        return False
+
+    def _set_time_since_last_update_now(self):
+        current_time = int(monotonic())
+        self.time_of_last_update = current_time
 
     def test_connection(self) -> bool:
         result = False
@@ -114,13 +131,13 @@ class Device:
             print(f'ssh err on {self.name}: {err}')
             return
         else:
+            self.interfaces = []
             remote_cmd = 'interface print terse'
             stdin, stdout, stderr = ssh.exec_command(remote_cmd)
             for line in stdout.readlines():
                 if 'name' not in line:
                     break
                 new_line = line.strip('\n')
-                print(new_line.split())
                 number = int(new_line.split()[0])
                 name = new_line.split('name=')[1].split()[0]
                 comment = ''
@@ -165,6 +182,9 @@ class Device:
 
     def print_cached_interfaces(self) -> None:
         if len(self.interfaces) == 0:
+            self.get_interfaces_from_device()
+            self._set_time_since_last_update_now()
+        if self.enought_time_passed():
             self.get_interfaces_from_device()
         if len(self.interfaces) == 0:
             print('No interfaces found')

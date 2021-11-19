@@ -1,8 +1,6 @@
 from typing import List
 
 from libs.configuration import Configuration
-from libs.cprint import cprint
-from libs.createdialog import CreateDialog
 from libs.device import Device
 from libs.devicemenu import DeviceMenu
 from libs.group import Group
@@ -40,13 +38,10 @@ class MainMenu:
         )
 
         self.commands = {
-            'quit cmnds': ['q', 'quit', 'exit'],
-            'help cmnds': ['h', 'help'],
-            'list cmnds': ['l', 'list'],
-            'create cmnds': ['c'],
-            'testall cmnds': ['ta'],
-            'device cmnds': ['d'],
-            'script cmnds': ['s'],
+            'quit': ['q', 'quit', 'exit'],
+            'help': ['h', 'help'],
+            'device menu': ['d'],
+            'script menu': ['s'],
         }
 
     def run(self) -> bool:
@@ -67,50 +62,15 @@ class MainMenu:
         if len(command_line) == 0:
             return True
         command = command_line.lower().split()[0]
-        if command in self.commands['quit cmnds']:
+        if command in self.commands['quit']:
             return False
-        elif command in self.commands['help cmnds']:
+        elif command in self.commands['help']:
             for c in self.commands:
                 print(f'{c}: {self.commands[c]}')
-        elif command in self.commands['list cmnds']:
-            if len(self.config.targets) > 0:
-                for target in self.config.targets:
-                    print(f'nme: {target["name"]}')
-                    print(f'IPa: {target["address"]}')
-                    print(f'prt: {target["port"]}')
-                    print(f'usr: {target["user"]}')
-                    print(f'grp: {target["group"]}')
-                    print('-'*20)
-
-        elif command in self.commands['create cmnds']:
-            create_dialog = CreateDialog(
-                self.config,
-                self.devices,
-                self.groups,
-            )
-            create_dialog.run()
-        elif command in self.commands['testall cmnds']:
-            print('Testing...')
-            output = []
-            for device in self.devices:
-                if device.test_connection():
-                    output.append((device.name, ': ok'))
-                else:
-                    output.append((device.name, ': KO!'))
-            print('result:')
-            print('-'*15)
-            cprint(output)
-        elif command[0] in self.commands['device cmnds']:
-            if len(command) > 1:
-                if command[1:3] == 'li':
-                    if len(command) > 3:
-                        if command[3] == 'r':
-                            # refresh before listing
-                            ...
-                    self.devices[1].print_cached_interfaces()
+        elif command[0] in self.commands['device menu']:
             while self.device_menu.run():
                 ...
-        elif command[0] in self.commands['script cmnds']:
+        elif command[0] in self.commands['script menu']:
             while self.script_menu.run():
                 ...
         else:
