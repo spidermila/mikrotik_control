@@ -1,3 +1,4 @@
+import getpass
 from typing import List
 from typing import Optional
 
@@ -71,12 +72,12 @@ class DeviceMenu:
                 print(f'{c}: {self.commands[c]}')
         elif command in self.commands['list all devices']:
             if len(self.config.targets) > 0:
-                for target in self.config.targets:
-                    print(f'nme: {target["name"]}')
-                    print(f'IPa: {target["address"]}')
-                    print(f'prt: {target["port"]}')
-                    print(f'usr: {target["user"]}')
-                    print(f'grp: {target["group"]}')
+                for device in self.devices:
+                    print(f'nme: {device.name}')
+                    print(f'IPa: {device.address}')
+                    print(f'prt: {device.port}')
+                    print(f'usr: {device.user}')
+                    print(f'grp: {device.group}')
                     print('-'*20)
         elif command in self.commands['list interfaces']:
             self.selected_device.print_cached_interfaces()
@@ -88,7 +89,7 @@ class DeviceMenu:
             )
             create_dialog.run()
         elif command in self.commands['edit device']:
-            ...
+            self.edit_dialog(self.selected_device)
         elif command in self.commands['select device']:
             self.selected_device = None
         elif command in self.commands['testall devices']:
@@ -106,3 +107,60 @@ class DeviceMenu:
             print('Unknown command')
             print('')
         return True
+
+    def edit_dialog(self, device: Device) -> None:
+        print(f'Name: {device.name}')
+        print('Leave blank to keep')
+        new_name = input('> ')
+        if new_name != '':
+            device.name = new_name
+
+        print(f'IP: {device.address}')
+        print('Leave blank to keep')
+        new_address = input('> ')
+        if new_address != '':
+            device.address = new_address
+
+        while True:
+            print(f'Port: {device.port}')
+            print('Leave blank to keep')
+            new_port = input('> ')
+            if new_port != '':
+                try:
+                    device.port = int(new_port)
+                except ValueError:
+                    print('Port must be an int number')
+                else:
+                    break
+            else:
+                break
+
+        print(f'User: {device.user}')
+        print('Leave blank to keep')
+        new_user = input('> ')
+        if new_user != '':
+            device.user = new_user
+
+        print('Password:')
+        print('Leave blank to keep')
+        new_password = getpass.getpass('> ')
+        if new_password != '':
+            device.encrypted_password = self.config.password_encrypt(
+                bytes(new_password, 'utf-8'),
+                self.config.password,
+            )
+        self.generate_targets_from_devices()
+        self.config.save_cfg_to_file()
+
+    def generate_targets_from_devices(self) -> None:
+        self.config.targets = []
+        for device in self.devices:
+            record = {
+                'name': device.name,
+                'address': device.address,
+                'port': device.port,
+                'user': device.user,
+                'password': device.encrypted_password,
+                'group': device.group,
+            }
+            self.config.targets.append(record)

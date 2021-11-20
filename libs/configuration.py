@@ -57,7 +57,7 @@ class Configuration:
 
     def password_encrypt(
             self,
-            message: bytes,
+            data_to_encrypt: bytes,
             password: str,
             iterations: int = 100_000,
     ) -> str:
@@ -67,7 +67,7 @@ class Configuration:
             b'%b%b%b' % (
                 salt,
                 iterations.to_bytes(4, 'big'),
-                b64d(Fernet(key).encrypt(message)),
+                b64d(Fernet(key).encrypt(data_to_encrypt)),
             ),
         ).decode('utf-8')
 

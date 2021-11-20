@@ -101,7 +101,7 @@ class CreateDialog:
         if len(user) == 0:
             user = 'control'
         print('Ener password')
-        device_password = getpass.getpass('>')
+        device_password = getpass.getpass('> ')
         encrypted_password = self.config.password_encrypt(
             bytes(device_password, 'utf-8'),
             self.config.password,
