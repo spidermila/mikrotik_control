@@ -119,10 +119,11 @@ class Configuration:
                     data = yaml.safe_load(stream)
                 except yaml.YAMLError as exc:
                     print(exc)
+                else:
+                    self.targets = data['targets']
         else:
             print(f"File {self.filename} doesn't exist.")
             return
-        self.targets = data['targets']
 
     def check_or_create_config_file(self) -> None:
         if Path(self.filename).is_file():

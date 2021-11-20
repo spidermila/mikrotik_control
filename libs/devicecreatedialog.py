@@ -7,7 +7,7 @@ from libs.device import Device
 from libs.group import Group
 
 
-class CreateDialog:
+class DeviceCreateDialog:
     def __init__(
         self,
         config: Configuration,
@@ -32,7 +32,7 @@ class CreateDialog:
             found = False
             for group in self.groups:
                 if new_group_name == group.name:
-                    print(f'Using existing group{group.name}')
+                    print(f'Using existing group {group.name}')
                     found = True
                     group_chosen = True
                     chosen_group = group
@@ -80,15 +80,19 @@ class CreateDialog:
             print('-'*15)
         print('Name of the new device')
         print('Leave blank to go back.')
-        name = input('>')
+        name = input('> ')
         if len(name) == 0:
             return
         print('Ener IP address')
-        address = input('>')
+        address = input('> ')
         while True:
+            print('Ener port (default: 22)')
+            prt = input('> ')
+            if prt == '':
+                port = 22
+                break
             try:
-                print('Ener port')
-                port = int(input('>'))
+                port = int(prt)
             except ValueError:
                 print('Port must be an integer!')
             else:

@@ -4,8 +4,8 @@ from typing import Optional
 
 from libs.configuration import Configuration
 from libs.cprint import cprint
-from libs.createdialog import CreateDialog
 from libs.device import Device
+from libs.devicecreatedialog import DeviceCreateDialog
 from libs.group import Group
 from libs.script import Script
 
@@ -82,12 +82,12 @@ class DeviceMenu:
         elif command in self.commands['list interfaces']:
             self.selected_device.print_cached_interfaces()
         elif command in self.commands['create device']:
-            create_dialog = CreateDialog(
+            device_create_dialog = DeviceCreateDialog(
                 self.config,
                 self.devices,
                 self.groups,
             )
-            create_dialog.run()
+            device_create_dialog.run()
         elif command in self.commands['edit device']:
             self.edit_dialog(self.selected_device)
         elif command in self.commands['select device']:
