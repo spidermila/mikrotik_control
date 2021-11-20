@@ -73,7 +73,10 @@ class Device:
                 ),
                 look_for_keys=False,
             )
-        except paramiko.AuthenticationException as err:
+        except (
+            paramiko.AuthenticationException,
+            paramiko.SSHException,
+        ) as err:
             print(f'ssh err on {self.name}: {err}')
             return False
         else:

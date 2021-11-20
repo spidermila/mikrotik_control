@@ -27,11 +27,11 @@ class DeviceMenu:
             'quit': ['q', 'quit', 'exit'],
             'help': ['h', 'help'],
             'list all devices': ['l'],
-            'list interfaces': ['li'],
+            'testall devices': ['ta'],
             'create device': ['c'],
             'edit device': ['e'],
             'select device': ['s'],
-            'testall devices': ['ta'],
+            'list interfaces': ['li'],
         }
 
     def run(self) -> bool:
@@ -39,7 +39,7 @@ class DeviceMenu:
             if len(self.devices) == 0:
                 return False
             print('Select a device to manage:')
-            print('Leave empty to go back.')
+            print('Leave empty to go back to main menu.')
             devices_with_idx = []
             indexes = []
             for idx, device in enumerate(self.devices):
