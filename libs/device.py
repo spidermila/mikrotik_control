@@ -204,9 +204,35 @@ class Device:
 
     def get_capsman_acl(self) -> None:
         output = self._ssh_call('caps-man access-list print terse')
+        self.capsman.acl.items = []
         for line in output:
-            if 'comment:' in line:
-                pass
+            if len(line.split()) > 1:
+                number = line.split()[0]
+                if 'comment=' in line:
+                    comment = line.split(
+                        'mac-address',
+                    )[0].split('comment=')[1].strip()
+                else:
+                    comment = ''
+                if 'mac-address' in line:
+                    macaddress = line.split('mac-address=')[-1].split()[0]
+                else:
+                    macaddress = ''
+                if 'interface' in line:
+                    interface = line.split('interface=')[-1].split()[0]
+                else:
+                    interface = ''
+                if 'action' in line:
+                    action = line.split('action=')[-1].split()[0]
+                else:
+                    action = ''
+                self.capsman.acl.additem(
+                    number,
+                    comment,
+                    macaddress,
+                    interface,
+                    action,
+                )
 
     def print_cached_interfaces(self) -> None:
         if len(self.interfaces) == 0:

@@ -31,6 +31,16 @@ class AccesslistMenu:
         elif command in self.commands['help']:
             for c in self.commands:
                 print(f'{c}: {self.commands[c]}')
+        elif command in self.commands['print']:
+            self.selected_device.get_capsman_acl()
+            for item in self.selected_device.capsman.acl.items:
+                print(
+                    f'{item.number} |' +
+                    f'{item.macaddress} |' +
+                    f'{item.comment} |' +
+                    f'{item.interface} |' +
+                    f'{item.action}',
+                )
         else:
             print('Unknown command')
             print('')
