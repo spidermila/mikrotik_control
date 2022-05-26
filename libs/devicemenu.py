@@ -25,7 +25,7 @@ class DeviceMenu:
         self.scripts = scripts
         self.selected_device: Optional[Device] = None
         self.commands = {
-            'quit': ['q', 'quit', 'exit'],
+            'back': ['q'],
             'help': ['h', 'help'],
             'list all devices': ['l'],
             'testall devices': ['ta'],
@@ -73,7 +73,7 @@ class DeviceMenu:
         if len(command_line) == 0:
             return True
         command = command_line.lower().split()[0]
-        if command in self.commands['quit']:
+        if command in self.commands['back']:
             return False
         elif command in self.commands['help']:
             for c in self.commands:

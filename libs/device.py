@@ -5,6 +5,7 @@ from typing import Optional
 
 import paramiko
 
+from libs.capsman.capsman import Capsman
 from libs.configuration import Configuration
 from libs.cprint import cprint
 from libs.group import Group
@@ -34,6 +35,8 @@ class Device:
 
         self.interfaces: List[Interface] = []
         self.time_of_last_update: Optional[int] = None
+
+        self.capsman = Capsman()
 
     def enought_time_passed(self, timeout: int = 20) -> bool:
         current_time = int(monotonic())
@@ -187,12 +190,23 @@ class Device:
                 ),
             )
 
-    def get_capsman_manager_status(self) -> List:
-        print(f'Updating capsman status from {self.name}...')
+    def get_capsman_manager_status(self) -> None:
+        # print(f'Updating capsman status from {self.name}...')
         output = self._ssh_call('caps-man manager print')
         for line in output:
-            print(line)
-        return []
+            if 'enabled:' in line:
+                if 'yes' in line:
+                    self.capsman.enabled = True
+                else:
+                    self.capsman.enabled = False
+                self.capsman.status_known = True
+                return
+
+    def get_capsman_acl(self) -> None:
+        output = self._ssh_call('caps-man access-list print terse')
+        for line in output:
+            if 'comment:' in line:
+                pass
 
     def print_cached_interfaces(self) -> None:
         if len(self.interfaces) == 0:

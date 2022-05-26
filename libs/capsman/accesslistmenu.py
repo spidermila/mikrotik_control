@@ -15,18 +15,18 @@ class AccesslistMenu:
         self.config = config
         self.selected_device = selected_device
         self.commands = {
-            'quit': ['q', 'quit', 'exit'],
+            'back': ['q'],
             'help': ['h', 'help'],
-            'access list menu': ['l'],
+            'print': ['p'],
         }
 
     def run(self) -> bool:
         print(f'>{self.selected_device.name}<')
-        command_line = input('dev: ')
+        command_line = input('dev/capsman/acl: ')
         if len(command_line) == 0:
             return True
         command = command_line.lower().split()[0]
-        if command in self.commands['quit']:
+        if command in self.commands['back']:
             return False
         elif command in self.commands['help']:
             for c in self.commands:

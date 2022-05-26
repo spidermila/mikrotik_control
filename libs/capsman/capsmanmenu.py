@@ -16,9 +16,9 @@ class CapsmanMenu:
         self.config = config
         self.selected_device = selected_device
         self.commands = {
-            'quit': ['q', 'quit', 'exit'],
+            'back': ['q'],
             'help': ['h', 'help'],
-            'access list menu': ['l'],
+            'access list menu': ['a'],
         }
 
         self.accesslist_menu = AccesslistMenu(
@@ -28,12 +28,17 @@ class CapsmanMenu:
 
     def run(self) -> bool:
         print(f'>{self.selected_device.name}<')
-        self.selected_device.get_capsman_manager_status()
+        if not self.selected_device.capsman.status_known:
+            self.selected_device.get_capsman_manager_status()
+        if self.selected_device.capsman.enabled:
+            print('CAPsMAN Enabled')
+        else:
+            print('CAPsMAN Disabled')
         command_line = input('dev/capsman: ')
         if len(command_line) == 0:
             return True
         command = command_line.lower().split()[0]
-        if command in self.commands['quit']:
+        if command in self.commands['back']:
             return False
         elif command in self.commands['help']:
             for c in self.commands:
