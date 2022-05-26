@@ -2,6 +2,7 @@ import getpass
 from typing import List
 from typing import Optional
 
+from libs.capsman.capsmanmenu import CapsmanMenu
 from libs.configuration import Configuration
 from libs.cprint import cprint
 from libs.device import Device
@@ -32,6 +33,7 @@ class DeviceMenu:
             'edit device': ['e'],
             'select device': ['s'],
             'list interfaces': ['li'],
+            'capsman menu': ['cm'],
         }
 
     def run(self) -> bool:
@@ -60,6 +62,12 @@ class DeviceMenu:
                         break
                     else:
                         print('Pick a number from the list of devices.')
+
+        self.capsman_menu = CapsmanMenu(
+            self.config,
+            self.selected_device,
+        )
+
         print(f'>{self.selected_device.name}<')
         command_line = input('dev: ')
         if len(command_line) == 0:
@@ -103,6 +111,9 @@ class DeviceMenu:
             print('result:')
             print('-'*15)
             cprint(output)
+        elif command in self.commands['capsman menu']:
+            while self.capsman_menu.run():
+                ...
         else:
             print('Unknown command')
             print('')
