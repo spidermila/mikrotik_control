@@ -2,6 +2,7 @@ import getpass
 from typing import List
 from typing import Optional
 
+from libs.capsman.capsmanmenu import CapsmanMenu
 from libs.configuration import Configuration
 from libs.cprint import cprint
 from libs.device import Device
@@ -24,7 +25,7 @@ class DeviceMenu:
         self.scripts = scripts
         self.selected_device: Optional[Device] = None
         self.commands = {
-            'quit': ['q', 'quit', 'exit'],
+            'back': ['q'],
             'help': ['h', 'help'],
             'list all devices': ['l'],
             'testall devices': ['ta'],
@@ -32,6 +33,7 @@ class DeviceMenu:
             'edit device': ['e'],
             'select device': ['s'],
             'list interfaces': ['li'],
+            'capsman menu': ['cm'],
         }
 
     def run(self) -> bool:
@@ -60,12 +62,18 @@ class DeviceMenu:
                         break
                     else:
                         print('Pick a number from the list of devices.')
+
+        self.capsman_menu = CapsmanMenu(
+            self.config,
+            self.selected_device,
+        )
+
         print(f'>{self.selected_device.name}<')
         command_line = input('dev: ')
         if len(command_line) == 0:
             return True
         command = command_line.lower().split()[0]
-        if command in self.commands['quit']:
+        if command in self.commands['back']:
             return False
         elif command in self.commands['help']:
             for c in self.commands:
@@ -103,6 +111,9 @@ class DeviceMenu:
             print('result:')
             print('-'*15)
             cprint(output)
+        elif command in self.commands['capsman menu']:
+            while self.capsman_menu.run():
+                ...
         else:
             print('Unknown command')
             print('')
