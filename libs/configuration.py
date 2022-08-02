@@ -3,7 +3,7 @@ import secrets
 
 try:
     import yaml
-except(NameError, ModuleNotFoundError):
+except (NameError, ModuleNotFoundError):
     import sys
     print('PyYAML is needed for this program.')
     raise ImportError(
