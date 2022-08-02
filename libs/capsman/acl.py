@@ -3,7 +3,7 @@ from typing import List
 
 class ACL:
     def __init__(self) -> None:
-        self.items: List[ACL_Item] = []
+        self.items: List[ACLItem] = []
 
     def additem(
             self,
@@ -14,7 +14,7 @@ class ACL:
             action: str,
     ):
         self.items.append(
-            ACL_Item(
+            ACLItem(
                 number,
                 comment,
                 macaddress,
@@ -24,7 +24,7 @@ class ACL:
         )
 
 
-class ACL_Item:
+class ACLItem:
     def __init__(
         self,
         number: int = -1,
