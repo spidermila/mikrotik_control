@@ -23,7 +23,7 @@ class ScriptHandler:
 
     def load_scripts(self) -> None:
         if Path(self.filename).is_file():
-            with open(self.filename, 'r') as stream:
+            with open(self.filename) as stream:
                 try:
                     data = yaml.safe_load(stream)
                 except yaml.YAMLError as exc:

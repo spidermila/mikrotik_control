@@ -31,7 +31,7 @@ class Configuration:
     def save_cfg_to_file(self) -> None:
         data = {}
         data['targets'] = self.targets
-        with io.open(self.filename, 'w', encoding='utf8') as outfile:
+        with open(self.filename, 'w', encoding='utf8') as outfile:
             yaml.dump(
                 data,
                 outfile,
@@ -114,7 +114,7 @@ class Configuration:
 
     def load_config(self) -> None:
         if Path(self.filename).is_file():
-            with open(self.filename, 'r') as stream:
+            with open(self.filename) as stream:
                 try:
                     data = yaml.safe_load(stream)
                 except yaml.YAMLError as exc:
@@ -128,7 +128,7 @@ class Configuration:
     def check_or_create_config_file(self) -> None:
         if Path(self.filename).is_file():
             file_has_data = False
-            with open(self.filename, 'r') as stream:
+            with open(self.filename) as stream:
                 try:
                     data = yaml.safe_load(stream)
                     file_has_data = True
