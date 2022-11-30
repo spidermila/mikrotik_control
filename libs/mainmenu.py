@@ -61,7 +61,10 @@ class MainMenu:
         command_line = input(': ')
         if len(command_line) == 0:
             return True
-        command = command_line.lower().split()[0]
+        try:
+            command = command_line.lower().split()[0]
+        except IndexError:
+            return True
         if command in self.commands['quit']:
             return False
         elif command in self.commands['help']:

@@ -37,7 +37,10 @@ class CapsmanMenu:
         command_line = input('dev/capsman: ')
         if len(command_line) == 0:
             return True
-        command = command_line.lower().split()[0]
+        try:
+            command = command_line.lower().split()[0]
+        except IndexError:
+            return True
         if command in self.commands['back']:
             return False
         elif command in self.commands['help']:
