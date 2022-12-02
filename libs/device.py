@@ -1,6 +1,4 @@
 import subprocess
-from time import monotonic
-from typing import List
 from typing import Optional
 
 import paramiko
@@ -33,33 +31,18 @@ class Device:
         self.group = group
         self.config = config
 
-        self.interfaces: List[Interface] = []
+        self.interfaces: list[Interface] = []
+        self.os_version: str = ''
         self.time_of_last_update: Optional[int] = None
 
         self.capsman = Capsman()
 
-    def enought_time_passed(self, timeout: int = 20) -> bool:
-        current_time = int(monotonic())
-        if not self.time_of_last_update:
-            self.time_of_last_update = current_time
-            return True
-        if current_time - self.time_of_last_update > timeout:
-            self._set_time_since_last_update_now()
-            return True
-        return False
-
-    def _set_time_since_last_update_now(self):
-        current_time = int(monotonic())
-        self.time_of_last_update = current_time
-
-    def test_connection(self) -> bool:
-        result = False
+    def test_connection(self) -> list[bool]:
+        result = [False, False]
         if self._ping_test():
-            result = True
+            result[0] = True
             if self._ssh_test():
-                result = True
-            else:
-                result = False
+                result[1] = True
         return result
 
     def _ssh_test(self) -> bool:
@@ -118,7 +101,7 @@ class Device:
             return False
         return True
 
-    def _ssh_call(self, remote_cmd: str) -> List:
+    def _ssh_call(self, remote_cmd: str) -> list:
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
@@ -178,8 +161,7 @@ class Device:
                 dynamic = True
             else:
                 dynamic = False
-            self.interfaces.append(
-                Interface(
+            interface = Interface(
                     number,
                     name,
                     disabled,
@@ -187,8 +169,20 @@ class Device:
                     slave,
                     dynamic,
                     comment,
-                ),
             )
+            interface._set_time_since_last_update_now()
+            self.interfaces.append(interface)
+
+    def get_os_version(self) -> None:
+        output = self._ssh_call('system package print')
+        for line in output:
+            if 'routeros' in line:
+                self.os_version = line.split()[2]
+                print(f'{self.name} os version refreshed')
+
+    def get_name(self) -> str:
+        output = self._ssh_call('system identity print')
+        return output[0].split()[1]
 
     def get_capsman_manager_status(self) -> None:
         # print(f'Updating capsman status from {self.name}...')
@@ -237,8 +231,7 @@ class Device:
     def print_cached_interfaces(self) -> None:
         if len(self.interfaces) == 0:
             self.get_interfaces_from_device()
-            self._set_time_since_last_update_now()
-        if self.enought_time_passed():
+        if self.interfaces[0].enought_time_passed():
             self.get_interfaces_from_device()
         if len(self.interfaces) == 0:
             print('No interfaces found')

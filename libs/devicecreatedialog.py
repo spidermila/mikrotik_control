@@ -27,6 +27,7 @@ class DeviceCreateDialog:
                 print('Existing groups:')
                 for group in self.groups:
                     print(f'{group.name}')
+                print('-' * 15)
             print('Enter group')
             new_group_name = input('> ')
             found = False
@@ -77,14 +78,12 @@ class DeviceCreateDialog:
             print('Already existing defices:')
             for device in self.devices:
                 print(f'{device.name}')
-            print('-'*15)
-        print('Name of the new device')
-        print('Leave blank to go back.')
-        name = input('> ')
-        if len(name) == 0:
-            return
+            print('-' * 15)
         print('Ener IP address')
+        print('Leave blank to go back.')
         address = input('> ')
+        if len(address) == 0:
+            return
         while True:
             print('Ener port (default: 22)')
             prt = input('> ')
@@ -110,6 +109,24 @@ class DeviceCreateDialog:
             bytes(device_password, 'utf-8'),
             self.config.password,
         )
+
+        _device = Device(
+            '_dummy_',
+            address,
+            port,
+            user,
+            encrypted_password,
+            '__dummy__',
+            self.config,
+        )
+        print('getting name from the device...')
+        name = _device.get_name()
+        print(f'device name: {name}')
+        print('enter device name or leave blank to keep the above.')
+        answer = input('>')
+        if len(answer) != 0:
+            name = answer
+
         chosen_group = self._pick_group_dialog()
 
         record = {
@@ -133,3 +150,4 @@ class DeviceCreateDialog:
         )
         self.config.targets.append(record)
         self.config.save_cfg_to_file()
+        print(f'New device {name} created and saved.')

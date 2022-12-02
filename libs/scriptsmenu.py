@@ -6,7 +6,7 @@ from libs.group import Group
 from libs.script import Script
 
 
-class ScriptMenu:
+class ScriptsMenu:
     def __init__(
         self,
         config: Configuration,
