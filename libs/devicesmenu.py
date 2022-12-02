@@ -105,10 +105,32 @@ class DevicesMenu:
             output = []
             for device in self.devices:
                 ping_result, ssh_result = device.test_connection()
-                if not ping_result:
-                    output.append((device.name, 'ping: ok'))
+                if ping_result:
+                    if ssh_result:
+                        output.append((
+                            device.name,
+                            ': ping ok',
+                            ': ssh ok',
+                        ))
+                    else:
+                        output.append((
+                            device.name,
+                            ': ping ok',
+                            ': ssh KO!',
+                        ))
                 else:
-                    output.append((device.name, ': KO!'))
+                    if ssh_result:
+                        output.append((
+                            device.name,
+                            ': ping KO!',
+                            ': ssh: ok',
+                        ))
+                    else:
+                        output.append((
+                            device.name,
+                            ': ping KO!',
+                            ': ssh: KO!',
+                        ))
             print('result:')
             print('-'*15)
             cprint(output)
