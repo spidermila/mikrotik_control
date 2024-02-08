@@ -22,6 +22,7 @@ class DevicesMenu:
         self.devices = devices
         self.groups = groups
         self.scripts = scripts
+        self.command_history: list[str] = []
         self.selected_device: Optional[Device] = None
         self.commands = {
             'back': ['q'],
@@ -51,7 +52,12 @@ class DevicesMenu:
             ))
             indexes.append(idx)
 
+        if len(self.command_history) == 0:
+            cprint(devices_with_idx)
+
         command_line = input('devices > ')
+        self.command_history.append(command_line)
+
         if len(command_line) == 0:
             cprint(devices_with_idx)
             return True
@@ -96,7 +102,7 @@ class DevicesMenu:
         elif command in self.commands['sort devices']:
             self.devices = sorted(
                 self.devices,
-                key=lambda x: x.group.name, reverse=True,
+                key=lambda x: x.name, reverse=True,
             )
             self.generate_targets_from_devices()
             self.config.save_cfg_to_file()

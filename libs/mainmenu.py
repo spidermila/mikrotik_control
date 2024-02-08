@@ -22,6 +22,7 @@ class MainMenu:
         self.groups = groups
         self.scripts = scripts
         self.password_verified = False
+        self.command_history: list[str] = []
 
         self.devices_menu = DevicesMenu(
             self.config,
@@ -44,6 +45,10 @@ class MainMenu:
             'scripts menu': ['s'],
         }
 
+    def _print_help(self) -> None:
+        for c in self.commands:
+            print(f'{c}: {self.commands[c]}')
+
     def run(self) -> bool:
         if not self.password_verified:
             if not self.config.is_password_correct():
@@ -58,7 +63,10 @@ class MainMenu:
             else:
                 self.password_verified = True
 
+        if len(self.command_history) == 0:
+            self._print_help()
         command_line = input(': ')
+        self.command_history.append(command_line)
         if len(command_line) == 0:
             return True
         try:
@@ -68,8 +76,7 @@ class MainMenu:
         if command in self.commands['quit']:
             return False
         elif command in self.commands['help']:
-            for c in self.commands:
-                print(f'{c}: {self.commands[c]}')
+            self._print_help()
         elif command[0] in self.commands['devices menu']:
             while self.devices_menu.run():
                 ...
