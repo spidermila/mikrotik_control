@@ -2,10 +2,10 @@ from typing import List
 
 from libs.configuration import Configuration
 from libs.device import Device
-from libs.devicemenu import DeviceMenu
+from libs.devicesmenu import DevicesMenu
 from libs.group import Group
 from libs.script import Script
-from libs.scriptmenu import ScriptMenu
+from libs.scriptsmenu import ScriptsMenu
 
 
 class MainMenu:
@@ -22,15 +22,16 @@ class MainMenu:
         self.groups = groups
         self.scripts = scripts
         self.password_verified = False
+        self.command_history: list[str] = []
 
-        self.device_menu = DeviceMenu(
+        self.devices_menu = DevicesMenu(
             self.config,
             self.devices,
             self.groups,
             self.scripts,
         )
 
-        self.script_menu = ScriptMenu(
+        self.scripts_menu = ScriptsMenu(
             self.config,
             self.devices,
             self.groups,
@@ -40,9 +41,13 @@ class MainMenu:
         self.commands = {
             'quit': ['q', 'quit', 'exit'],
             'help': ['h', 'help'],
-            'device menu': ['d'],
-            'script menu': ['s'],
+            'devices menu': ['d'],
+            'scripts menu': ['s'],
         }
+
+    def _print_help(self) -> None:
+        for c in self.commands:
+            print(f'{c}: {self.commands[c]}')
 
     def run(self) -> bool:
         if not self.password_verified:
@@ -58,7 +63,10 @@ class MainMenu:
             else:
                 self.password_verified = True
 
+        if len(self.command_history) == 0:
+            self._print_help()
         command_line = input(': ')
+        self.command_history.append(command_line)
         if len(command_line) == 0:
             return True
         try:
@@ -68,13 +76,12 @@ class MainMenu:
         if command in self.commands['quit']:
             return False
         elif command in self.commands['help']:
-            for c in self.commands:
-                print(f'{c}: {self.commands[c]}')
-        elif command[0] in self.commands['device menu']:
-            while self.device_menu.run():
+            self._print_help()
+        elif command[0] in self.commands['devices menu']:
+            while self.devices_menu.run():
                 ...
-        elif command[0] in self.commands['script menu']:
-            while self.script_menu.run():
+        elif command[0] in self.commands['scripts menu']:
+            while self.scripts_menu.run():
                 ...
         else:
             print('Unknown command')
