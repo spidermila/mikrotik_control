@@ -16,12 +16,10 @@ repos:
     rev: v3.16.0
     hooks:
     -   id: reorder-python-imports
-        args: [--py3-plus]
 -   repo: https://github.com/asottile/add-trailing-comma
     rev: v4.0.0
     hooks:
     -   id: add-trailing-comma
-        args: [--py36-plus]
 -   repo: https://github.com/asottile/pyupgrade
     rev: v3.21.0
     hooks:
